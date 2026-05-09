@@ -25,15 +25,26 @@
               <th class="px-4 py-3 font-semibold">Qty</th>
               <th class="px-4 py-3 font-semibold">Price</th>
               <th class="px-4 py-3 font-semibold">Subtotal</th>
+              <th class="px-4 py-3" v-if="canCancelItems"></th>
             </tr>
           </thead>
           <tbody>
             <tr v-for="item in order?.items" :key="item.id"
-              class="border-t border-gray-50">
-              <td class="px-4 py-3 text-gray-700">{{ item.name }}</td>
+              :class="['border-t border-gray-50', item.cancelled && 'opacity-50']">
+              <td class="px-4 py-3 text-gray-700">
+                {{ item.name }}
+                <span v-if="item.cancelled" class="text-red-500 text-xs ml-1 font-semibold">(Cancelled)</span>
+              </td>
               <td class="px-4 py-3 text-gray-600">{{ item.qty }}</td>
               <td class="px-4 py-3 text-gray-600">₱{{ item.price.toLocaleString() }}</td>
               <td class="px-4 py-3 font-semibold text-gray-800">₱{{ (item.qty * item.price).toLocaleString() }}</td>
+              <td class="px-4 py-3" v-if="canCancelItems">
+                <button
+                  v-if="!item.cancelled"
+                  @click="cancelItem(item)"
+                  class="text-red-400 hover:text-red-600 text-xs font-medium"
+                >Cancel Item</button>
+              </td>
             </tr>
           </tbody>
         </table>
@@ -41,7 +52,7 @@
 
       <div class="flex justify-between items-center mb-6">
         <span class="font-bold text-gray-700">Total Amount</span>
-        <span class="text-xl font-bold text-blue-600">₱{{ order?.total.toLocaleString() }}</span>
+        <span class="text-xl font-bold text-blue-600">₱{{ order?.total?.toLocaleString() }}</span>
       </div>
 
       <button
@@ -55,10 +66,20 @@
 <script setup>
 import { ORDER_STATUS } from '~/utils/orders/orderStatus'
 
-defineProps({
+const props = defineProps({
   show: { type: Boolean, required: true },
   order: { type: Object, default: null },
 })
 
-defineEmits(['close'])
+const emit = defineEmits(['close', 'cancel-item'])
+
+const canCancelItems = computed(() =>
+  props.order?.status === 'Pending' || props.order?.status === 'Confirmed'
+)
+
+const cancelItem = (item) => {
+  if (confirm(`Cancel "${item.name}" from this order? Stock will be restored.`)) {
+    emit('cancel-item', item.id)
+  }
+}
 </script>

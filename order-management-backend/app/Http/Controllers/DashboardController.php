@@ -16,13 +16,13 @@ class DashboardController extends Controller
         $totalProducts = Product::count();
         $totalOrders = Order::count();
         $pendingOrders = Order::where('status', 'Pending')->count();
-        $lowStock = Product::where('stock', '>', 0)->where('stock', '<=', 10)->count();
+        $totalRevenue = Order::where('status', 'Confirmed')->sum('total');
 
         $stats = [
             ['icon' => 'package', 'bg' => 'bg-blue-100', 'label' => 'Total Products', 'value' => (string) $totalProducts, 'trend' => '', 'trendColor' => ''],
             ['icon' => 'shopping-cart', 'bg' => 'bg-green-100', 'label' => 'Total Orders', 'value' => (string) $totalOrders, 'trend' => '', 'trendColor' => ''],
+            ['icon' => 'dollar-sign', 'bg' => 'bg-green-100', 'label' => 'Total Revenue', 'value' => '₱' . number_format($totalRevenue), 'trend' => '', 'trendColor' => ''],
             ['icon' => 'clock', 'bg' => 'bg-yellow-100', 'label' => 'Pending Orders', 'value' => (string) $pendingOrders, 'trend' => '', 'trendColor' => ''],
-            ['icon' => 'alert-triangle', 'bg' => 'bg-red-100', 'label' => 'Low Stock Items', 'value' => (string) $lowStock, 'trend' => '', 'trendColor' => ''],
         ];
 
         $recentOrders = OrderResource::collection(

@@ -111,6 +111,8 @@ class OrderController extends Controller
             $order->update(['status' => 'Cancelled']);
 
             foreach ($order->items as $item) {
+                if ($item->cancelled) continue;
+
                 Product::where('id', $item->product_id)->increment('stock', $item->qty);
 
                 ActivityLog::create([
@@ -124,6 +126,46 @@ class OrderController extends Controller
                 'type' => 'order',
                 'message' => "Order {$order->number} cancelled",
                 'detail' => "Order cancelled (was {$previousStatus})",
+            ]);
+        });
+
+        return new OrderResource($order->load('items'));
+    }
+
+    public function cancelItem(Request $request, Order $order)
+    {
+        if ($order->status === 'Cancelled') {
+            return response()->json(['message' => 'Cannot cancel items on a fully cancelled order'], 400);
+        }
+
+        $validated = $request->validate([
+            'item_id' => 'required|exists:order_items,id',
+        ]);
+
+        DB::transaction(function () use ($order, $validated) {
+            $item = $order->items()->where('id', $validated['item_id'])->firstOrFail();
+
+            if ($item->cancelled) {
+                abort(400, 'Item is already cancelled');
+            }
+
+            $item->update(['cancelled' => true]);
+
+            Product::where('id', $item->product_id)->increment('stock', $item->qty);
+
+            $subtotal = $item->qty * $item->price;
+            $order->decrement('total', $subtotal);
+
+            ActivityLog::create([
+                'type' => 'restore',
+                'message' => "Stock restored for {$item->name}",
+                'detail' => "{$item->qty} unit(s) restored (Order {$order->number} item cancelled)",
+            ]);
+
+            ActivityLog::create([
+                'type' => 'order',
+                'message' => "Item {$item->name} cancelled in Order {$order->number}",
+                'detail' => "Item was cancelled from order, subtotal removed: ₱{$subtotal}",
             ]);
         });
 

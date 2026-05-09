@@ -23,7 +23,7 @@ const tabs = [
   ...Object.entries(LOG_TYPES).map(([value, t]) => ({ icon: t.icon, label: t.label, value }))
 ]
 
-const { data: logsData } = await useAsyncData('logs', () => get('/logs'))
+const { data: logsData } = useAsyncData('logs', () => get('/logs'))
 
 watch(logsData, (val) => { logs.value = val?.data ?? [] }, { immediate: true })
 

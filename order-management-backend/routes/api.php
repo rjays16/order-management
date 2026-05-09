@@ -14,5 +14,6 @@ Route::get('orders', [OrderController::class, 'index']);
 Route::post('orders', [OrderController::class, 'store']);
 Route::put('orders/{order}/confirm', [OrderController::class, 'confirm']);
 Route::put('orders/{order}/cancel', [OrderController::class, 'cancel']);
+Route::put('orders/{order}/cancel-item', [OrderController::class, 'cancelItem']);
 
 Route::get('logs', [LogController::class, 'index']);

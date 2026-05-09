@@ -18,7 +18,7 @@ definePageMeta({ layout: 'default' })
 
 const { get } = useApi()
 
-const { data: dashboard } = await useAsyncData('dashboard', () => get('/dashboard'))
+const { data: dashboard } = useAsyncData('dashboard', () => get('/dashboard'))
 
 const stats = computed(() => dashboard.value?.stats ?? [])
 const recentOrders = computed(() =>

@@ -20,6 +20,7 @@ class OrderResource extends JsonResource
                 'name' => $item->name,
                 'qty' => $item->qty,
                 'price' => $item->price,
+                'cancelled' => (bool) $item->cancelled,
             ]),
         ];
     }

@@ -25,6 +25,7 @@ import ProductFormModal from '~/components/products/ProductFormModal.vue'
 definePageMeta({ layout: 'default' })
 
 const { get, post, put, del } = useApi()
+const toast = useToast()
 
 const search = ref('')
 const showAddModal = ref(false)
@@ -33,7 +34,7 @@ const editingId = ref(null)
 const form = ref({ name: '', description: '', price: '', stock: '' })
 const products = ref([])
 
-const { data: productsData } = await useAsyncData('products', () => get('/products'))
+const { data: productsData } = useAsyncData('products', () => get('/products'))
 
 watch(productsData, (val) => { products.value = val?.data ?? [] }, { immediate: true })
 
@@ -61,27 +62,38 @@ const editProduct = (product) => {
 }
 
 const deleteProduct = async (id) => {
-  await del(`/products/${id}`)
-  products.value = products.value.filter(p => p.id !== id)
+  try {
+    await del(`/products/${id}`)
+    products.value = products.value.filter(p => p.id !== id)
+    toast.success('Product deleted successfully')
+  } catch (e) {
+    toast.error(e.message)
+  }
 }
 
 const saveProduct = async (data) => {
-  const payload = {
-    name: data.name,
-    description: data.description,
-    price: Number(data.price),
-    stock: Number(data.stock),
-  }
+  try {
+    const payload = {
+      name: data.name,
+      description: data.description,
+      price: Number(data.price),
+      stock: Number(data.stock),
+    }
 
-  if (showEditModal.value) {
-    const res = await put(`/products/${editingId.value}`, payload)
-    const idx = products.value.findIndex(p => p.id === editingId.value)
-    if (idx !== -1) products.value[idx] = res.data
-  } else {
-    const res = await post('/products', payload)
-    products.value.push(res.data)
+    if (showEditModal.value) {
+      const res = await put(`/products/${editingId.value}`, payload)
+      const idx = products.value.findIndex(p => p.id === editingId.value)
+      if (idx !== -1) products.value[idx] = res.data
+      toast.success('Product updated successfully')
+    } else {
+      const res = await post('/products', payload)
+      products.value.push(res.data)
+      toast.success('Product added successfully')
+    }
+    closeModal()
+  } catch (e) {
+    toast.error(e.message)
   }
-  closeModal()
 }
 
 const closeModal = () => {

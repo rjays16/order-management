@@ -13,6 +13,7 @@
       :show="showViewModal"
       :order="selectedOrder"
       @close="showViewModal = false"
+      @cancel-item="cancelOrderItem"
     />
     <OrderCreateModal
       :show="showCreateModal"
@@ -31,6 +32,7 @@ import OrderCreateModal from '~/components/orders/OrderCreateModal.vue'
 definePageMeta({ layout: 'default' })
 
 const { get, post, put } = useApi()
+const toast = useToast()
 
 const activeTab = ref('All')
 const showViewModal = ref(false)
@@ -39,8 +41,8 @@ const selectedOrder = ref(null)
 const orders = ref([])
 const productList = ref([])
 
-const { data: ordersData } = await useAsyncData('orders', () => get('/orders'))
-const { data: productsData } = await useAsyncData('order-products', () => get('/products'))
+const { data: ordersData } = useAsyncData('orders', () => get('/orders'))
+const { data: productsData } = useAsyncData('order-products', () => get('/products'))
 
 watch(ordersData, (val) => { orders.value = val?.data ?? [] }, { immediate: true })
 watch(productsData, (val) => {
@@ -64,21 +66,48 @@ const viewOrder = (order) => {
 }
 
 const confirmOrder = async (id) => {
-  const res = await put(`/orders/${id}/confirm`)
-  const idx = orders.value.findIndex(o => o.id === id)
-  if (idx !== -1) orders.value[idx] = res.data
+  try {
+    const res = await put(`/orders/${id}/confirm`)
+    const idx = orders.value.findIndex(o => o.id === id)
+    if (idx !== -1) orders.value[idx] = res.data
+    toast.success('Order confirmed successfully')
+  } catch (e) {
+    toast.error(e.message)
+  }
 }
 
 const cancelOrder = async (id) => {
-  const res = await put(`/orders/${id}/cancel`)
-  const idx = orders.value.findIndex(o => o.id === id)
-  if (idx !== -1) orders.value[idx] = res.data
+  try {
+    const res = await put(`/orders/${id}/cancel`)
+    const idx = orders.value.findIndex(o => o.id === id)
+    if (idx !== -1) orders.value[idx] = res.data
+    toast.success('Order cancelled successfully')
+  } catch (e) {
+    toast.error(e.message)
+  }
+}
+
+const cancelOrderItem = async (itemId) => {
+  try {
+    const res = await put(`/orders/${selectedOrder.value.id}/cancel-item`, { item_id: itemId })
+    const idx = orders.value.findIndex(o => o.id === selectedOrder.value.id)
+    if (idx !== -1) orders.value[idx] = res.data
+    selectedOrder.value = res.data
+    toast.success('Item cancelled successfully')
+  } catch (e) {
+    toast.error(e.message)
+  }
 }
 
 const createOrder = async (items) => {
-  const payload = { items: items.map(i => ({ product_id: i.productId, qty: i.qty })) }
-  const res = await post('/orders', payload)
-  orders.value.unshift(res.data)
-  showCreateModal.value = false
+  try {
+    const payload = { items: items.map(i => ({ product_id: i.productId, qty: i.qty })) }
+    const res = await post('/orders', payload)
+    orders.value.unshift(res.data)
+    showCreateModal.value = false
+    toast.success('Order created successfully')
+  } catch (e) {
+    toast.error(e.message)
+  }
 }
 </script>
