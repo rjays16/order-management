@@ -43,8 +43,6 @@ class OrderController extends Controller
                     abort(400, "Insufficient stock for {$product->name}");
                 }
 
-                $product->decrement('stock', $item['qty']);
-
                 $lineTotal = $product->price * $item['qty'];
                 $total += $lineTotal;
 
@@ -71,14 +69,6 @@ class OrderController extends Controller
                 'detail' => "Order Pending for {$names}",
             ]);
 
-            foreach ($orderItems as $item) {
-                ActivityLog::create([
-                    'type' => 'deduct',
-                    'message' => "Stock deducted for {$item['name']}",
-                    'detail' => "{$item['qty']} unit(s) deducted (Order {$orderNumber})",
-                ]);
-            }
-
             return new OrderResource($order->load('items'));
         });
     }
@@ -89,13 +79,33 @@ class OrderController extends Controller
             return response()->json(['message' => 'Only pending orders can be confirmed'], 400);
         }
 
-        $order->update(['status' => 'Confirmed']);
+        DB::transaction(function () use ($order) {
+            foreach ($order->items as $item) {
+                if ($item->cancelled) continue;
 
-        ActivityLog::create([
-            'type' => 'order',
-            'message' => "Order {$order->number} confirmed",
-            'detail' => "Order status changed to Confirmed",
-        ]);
+                $product = Product::findOrFail($item->product_id);
+
+                if ($product->stock < $item->qty) {
+                    abort(400, "Insufficient stock for {$item->name}");
+                }
+
+                $product->decrement('stock', $item->qty);
+
+                ActivityLog::create([
+                    'type' => 'deduct',
+                    'message' => "Stock deducted for {$item->name}",
+                    'detail' => "{$item->qty} unit(s) deducted (Order {$order->number} confirmed)",
+                ]);
+            }
+
+            $order->update(['status' => 'Confirmed']);
+
+            ActivityLog::create([
+                'type' => 'order',
+                'message' => "Order {$order->number} confirmed",
+                'detail' => "Order status changed to Confirmed",
+            ]);
+        });
 
         return new OrderResource($order->load('items'));
     }

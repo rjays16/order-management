@@ -44,6 +44,12 @@ class OrderSeeder extends Seeder
 
             $order = Order::create($data);
             $order->items()->createMany($items);
+
+            if ($order->status === 'Confirmed') {
+                foreach ($items as $item) {
+                    Product::where('id', $item['product_id'])->decrement('stock', $item['qty']);
+                }
+            }
         }
     }
 }
