@@ -7,40 +7,47 @@
       <DashboardInventory :products="inventory" />
     </div>
 
-    <DashboardRecentActivity :logs="recentLogs" />
+    <DashboardRecentActivity :logs="recentActivity" />
   </div>
 </template>
 
 <script setup>
+import { logConfig } from '~/utils/logs/logTypes'
+
 definePageMeta({ layout: 'default' })
 
-const stats = [
-  { icon: 'shopping-cart', bg: 'bg-blue-100', label: 'Total Orders', value: '128', trend: '↑ 12% this month', trendColor: 'text-green-500' },
-  { icon: 'dollar-sign', bg: 'bg-green-100', label: 'Total Revenue', value: '₱54,320', trend: '↑ 8% this month', trendColor: 'text-green-500' },
-  { icon: 'package', bg: 'bg-yellow-100', label: 'Total Products', value: '45', trend: '3 low in stock', trendColor: 'text-yellow-500' },
-  { icon: 'x-circle', bg: 'bg-red-100', label: 'Cancelled Orders', value: '8', trend: '↓ 2% this month', trendColor: 'text-red-500' },
-]
+const { get } = useApi()
 
-const recentOrders = [
-  { id: 1, number: 'ORD-001', date: 'May 9, 2026', amount: '₱1,200', status: 'Confirmed' },
-  { id: 2, number: 'ORD-002', date: 'May 9, 2026', amount: '₱850', status: 'Pending' },
-  { id: 3, number: 'ORD-003', date: 'May 8, 2026', amount: '₱3,400', status: 'Confirmed' },
-  { id: 4, number: 'ORD-004', date: 'May 8, 2026', amount: '₱620', status: 'Cancelled' },
-  { id: 5, number: 'ORD-005', date: 'May 7, 2026', amount: '₱2,100', status: 'Confirmed' },
-]
+const { data: dashboard } = await useAsyncData('dashboard', () => get('/dashboard'))
 
-const inventory = [
-  { id: 1, name: 'Laptop Stand', stock: 5, max: 50 },
-  { id: 2, name: 'Mechanical Keyboard', stock: 23, max: 50 },
-  { id: 3, name: 'USB-C Hub', stock: 8, max: 50 },
-  { id: 4, name: 'Webcam HD', stock: 35, max: 50 },
-  { id: 5, name: 'Mouse Pad XL', stock: 42, max: 50 },
-]
-
-const recentLogs = [
-  { icon: 'check-circle', color: 'bg-green-500', message: 'Order ORD-003 confirmed — inventory deducted', time: '2 hours ago' },
-  { icon: 'plus', color: 'bg-blue-500', message: 'Added 20 units of Mechanical Keyboard', time: '4 hours ago' },
-  { icon: 'x-circle', color: 'bg-red-500', message: 'Order ORD-004 cancelled — inventory restored', time: '5 hours ago' },
-  { icon: 'shopping-cart', color: 'bg-yellow-500', message: 'New order ORD-005 created', time: '1 day ago' },
-]
+const stats = computed(() => dashboard.value?.stats ?? [])
+const recentOrders = computed(() =>
+  (dashboard.value?.recentOrders?.data ?? []).map(o => ({
+    id: o.id,
+    number: o.number,
+    date: o.date,
+    amount: '₱' + o.total.toLocaleString(),
+    status: o.status,
+  }))
+)
+const inventory = computed(() =>
+  (dashboard.value?.inventory ?? []).map(p => ({
+    id: p.id,
+    name: p.name,
+    stock: p.stock,
+    max: 50,
+  }))
+)
+const recentActivity = computed(() =>
+  (dashboard.value?.recentActivity?.data ?? []).map(l => {
+    const cfg = logConfig(l.type)
+    return {
+      id: l.id,
+      icon: cfg.icon,
+      color: cfg.dotClass,
+      message: l.message,
+      time: l.time,
+    }
+  })
+)
 </script>

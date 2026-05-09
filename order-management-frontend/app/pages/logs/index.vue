@@ -12,23 +12,19 @@ import { LOG_TYPES } from '~/utils/logs/logTypes'
 
 definePageMeta({ layout: 'default' })
 
+const { get } = useApi()
+
 const activeTab = ref('All')
+const logs = ref([])
 
 const tabs = [
   { icon: '', label: 'All', value: 'All' },
   ...Object.entries(LOG_TYPES).map(([value, t]) => ({ icon: t.icon, label: t.label, value }))
 ]
 
-const logs = ref([
-  { id: 1, type: 'order',  message: 'Order ORD-001 confirmed',                     detail: 'Inventory deducted: Laptop Stand x1',          time: '2 hours ago' },
-  { id: 2, type: 'deduct', message: 'Inventory deducted — Laptop Stand',           detail: 'Quantity changed: -1 unit (Stock: 6 → 5)',      time: '2 hours ago' },
-  { id: 3, type: 'add',    message: 'Inventory added — Mechanical Keyboard',       detail: 'Quantity changed: +20 units (Stock: 3 → 23)',   time: '4 hours ago' },
-  { id: 4, type: 'order',  message: 'Order ORD-004 cancelled',                     detail: 'Inventory restored: Mouse Pad XL x1',          time: '5 hours ago' },
-  { id: 5, type: 'restore',message: 'Inventory restored — Mouse Pad XL',           detail: 'Quantity changed: +1 unit (Stock: 41 → 42)',    time: '5 hours ago' },
-  { id: 6, type: 'order',  message: 'New order ORD-005 created',                   detail: 'Items: Webcam HD x1 — Total: ₱2,100',          time: '1 day ago' },
-  { id: 7, type: 'add',    message: 'Inventory added — Webcam HD',                 detail: 'Quantity changed: +10 units (Stock: 25 → 35)',  time: '1 day ago' },
-  { id: 8, type: 'deduct', message: 'Inventory deducted — USB-C Hub',              detail: 'Quantity changed: -2 units (Stock: 10 → 8)',    time: '2 days ago' },
-])
+const { data: logsData } = await useAsyncData('logs', () => get('/logs'))
+
+watch(logsData, (val) => { logs.value = val?.data ?? [] }, { immediate: true })
 
 const filteredLogs = computed(() =>
   activeTab.value === 'All' ? logs.value : logs.value.filter(l => l.type === activeTab.value)

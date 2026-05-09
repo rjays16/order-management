@@ -16,7 +16,7 @@
     />
     <OrderCreateModal
       :show="showCreateModal"
-      :products="PRODUCTS"
+      :products="productList"
       @create="createOrder"
       @close="showCreateModal = false"
     />
@@ -25,16 +25,25 @@
 
 <script setup>
 import { ORDER_STATUS, TABS } from '~/utils/orders/orderStatus'
-import { SEED_ORDERS, PRODUCTS } from '~/utils/orders/orderStorage'
 
 definePageMeta({ layout: 'default' })
+
+const { get, post, put } = useApi()
 
 const activeTab = ref('All')
 const showViewModal = ref(false)
 const showCreateModal = ref(false)
 const selectedOrder = ref(null)
+const orders = ref([])
+const productList = ref([])
 
-const orders = ref(SEED_ORDERS.map(o => ({ ...o, items: [...o.items] })))
+const { data: ordersData } = await useAsyncData('orders', () => get('/orders'))
+const { data: productsData } = await useAsyncData('order-products', () => get('/products'))
+
+watch(ordersData, (val) => { orders.value = val?.data ?? [] }, { immediate: true })
+watch(productsData, (val) => {
+  productList.value = (val?.data ?? []).map(p => ({ id: p.id, name: p.name, price: p.price }))
+}, { immediate: true })
 
 const filteredOrders = computed(() =>
   activeTab.value === 'All' ? orders.value : orders.value.filter(o => o.status === activeTab.value)
@@ -52,31 +61,22 @@ const viewOrder = (order) => {
   showViewModal.value = true
 }
 
-const confirmOrder = (id) => {
-  const order = orders.value.find(o => o.id === id)
-  if (order) order.status = 'Confirmed'
+const confirmOrder = async (id) => {
+  const res = await put(`/orders/${id}/confirm`)
+  const idx = orders.value.findIndex(o => o.id === id)
+  if (idx !== -1) orders.value[idx] = res.data
 }
 
-const cancelOrder = (id) => {
-  const order = orders.value.find(o => o.id === id)
-  if (order) order.status = 'Cancelled'
+const cancelOrder = async (id) => {
+  const res = await put(`/orders/${id}/cancel`)
+  const idx = orders.value.findIndex(o => o.id === id)
+  if (idx !== -1) orders.value[idx] = res.data
 }
 
-const createOrder = (items) => {
-  orders.value.unshift({
-    id: Date.now(),
-    number: `ORD-00${orders.value.length + 1}`,
-    date: new Date().toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }),
-    status: 'Pending',
-    total: items.reduce((sum, i) => {
-      const product = PRODUCTS.find(p => p.id === i.productId)
-      return sum + (product ? product.price * i.qty : 0)
-    }, 0),
-    items: items.map(i => {
-      const product = PRODUCTS.find(p => p.id === i.productId)
-      return { id: i.productId, name: product.name, qty: i.qty, price: product.price }
-    }),
-  })
+const createOrder = async (items) => {
+  const payload = { items: items.map(i => ({ product_id: i.productId, qty: i.qty })) }
+  const res = await post('/orders', payload)
+  orders.value.unshift(res.data)
   showCreateModal.value = false
 }
 </script>

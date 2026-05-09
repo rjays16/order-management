@@ -19,17 +19,22 @@
 </template>
 
 <script setup>
-import { stockStatus, SEED_PRODUCTS } from '~/utils/products/productStorage'
+import { stockStatus } from '~/utils/products/productStorage'
 
 definePageMeta({ layout: 'default' })
+
+const { get, post, put, del } = useApi()
 
 const search = ref('')
 const showAddModal = ref(false)
 const showEditModal = ref(false)
 const editingId = ref(null)
-
 const form = ref({ name: '', description: '', price: '', stock: '' })
-const products = ref(SEED_PRODUCTS.map(p => ({ ...p })))
+const products = ref([])
+
+const { data: productsData } = await useAsyncData('products', () => get('/products'))
+
+watch(productsData, (val) => { products.value = val?.data ?? [] }, { immediate: true })
 
 const filteredProducts = computed(() =>
   products.value.filter(p =>
@@ -54,21 +59,26 @@ const editProduct = (product) => {
   showEditModal.value = true
 }
 
-const deleteProduct = (id) => {
+const deleteProduct = async (id) => {
+  await del(`/products/${id}`)
   products.value = products.value.filter(p => p.id !== id)
 }
 
-const saveProduct = (data) => {
+const saveProduct = async (data) => {
+  const payload = {
+    name: data.name,
+    description: data.description,
+    price: Number(data.price),
+    stock: Number(data.stock),
+  }
+
   if (showEditModal.value) {
-    const index = products.value.findIndex(p => p.id === editingId.value)
-    products.value[index] = { ...data, id: editingId.value }
+    const res = await put(`/products/${editingId.value}`, payload)
+    const idx = products.value.findIndex(p => p.id === editingId.value)
+    if (idx !== -1) products.value[idx] = res.data
   } else {
-    products.value.push({
-      id: Date.now(),
-      ...data,
-      price: Number(data.price),
-      stock: Number(data.stock),
-    })
+    const res = await post('/products', payload)
+    products.value.push(res.data)
   }
   closeModal()
 }
