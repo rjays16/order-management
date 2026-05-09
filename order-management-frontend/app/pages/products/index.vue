@@ -20,6 +20,7 @@
 
 <script setup>
 import { stockStatus } from '~/utils/products/productStorage'
+import ProductFormModal from '~/components/products/ProductFormModal.vue'
 
 definePageMeta({ layout: 'default' })
 
