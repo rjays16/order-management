@@ -38,9 +38,9 @@ const filteredProducts = computed(() =>
 )
 
 const stats = computed(() => [
-  { icon: '📦', bg: 'bg-blue-100', label: 'Total Products', count: products.value.length },
-  { icon: '✅', bg: 'bg-green-100', label: 'In Stock', count: products.value.filter(p => p.stock > 10).length },
-  { icon: '⚠️', bg: 'bg-red-100', label: 'Low Stock', count: products.value.filter(p => p.stock <= 10).length },
+  { icon: 'package', bg: 'bg-blue-100', label: 'Total Products', count: products.value.length },
+  { icon: 'check-circle', bg: 'bg-green-100', label: 'In Stock', count: products.value.filter(p => p.stock > 10).length },
+  { icon: 'alert-triangle', bg: 'bg-red-100', label: 'Low Stock', count: products.value.filter(p => p.stock <= 10).length },
 ])
 
 const openAddModal = () => {

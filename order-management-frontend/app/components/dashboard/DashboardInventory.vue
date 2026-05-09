@@ -1,7 +1,7 @@
 <template>
   <div class="bg-white rounded-2xl shadow-sm p-6">
     <div class="flex items-center justify-between mb-4">
-      <h3 class="text-lg font-bold text-gray-800">📦 Inventory</h3>
+      <h3 class="text-lg font-bold text-gray-800 flex items-center gap-2"><Icon name="package" class="w-5 h-5" /> Inventory</h3>
       <NuxtLink to="/products" class="text-sm text-blue-500 hover:underline">View all →</NuxtLink>
     </div>
     <div class="space-y-4">

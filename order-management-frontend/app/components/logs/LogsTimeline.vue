@@ -8,10 +8,10 @@
           :key="log.id"
           class="flex items-start gap-4 relative"
         >
-          <div :class="logConfig(log.type).dotClass"
-            class="w-12 h-12 rounded-full flex items-center justify-center text-white text-lg flex-shrink-0 z-10 shadow-md">
-            {{ logConfig(log.type).icon }}
-          </div>
+            <div :class="logConfig(log.type).dotClass"
+              class="w-12 h-12 rounded-full flex items-center justify-center text-white flex-shrink-0 z-10 shadow-md">
+              <Icon :name="logConfig(log.type).icon" class="w-5 h-5" />
+            </div>
           <div class="flex-1 bg-gray-50 rounded-2xl p-4 hover:bg-gray-100 transition-all">
             <div class="flex items-start justify-between">
               <div>
@@ -29,7 +29,7 @@
           </div>
         </div>
         <div v-if="logs.length === 0" class="text-center py-16 text-gray-400">
-          <div class="text-5xl mb-3">📋</div>
+          <Icon name="clipboard-list" class="w-12 h-12 mb-3 mx-auto text-gray-300" />
           <p>No logs found</p>
         </div>
       </div>

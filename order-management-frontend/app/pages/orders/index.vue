@@ -41,7 +41,7 @@ const filteredOrders = computed(() =>
 )
 
 const stats = computed(() => [
-  { icon: '🛒', bg: 'bg-blue-100', label: 'Total Orders', count: orders.value.length },
+  { icon: 'shopping-cart', bg: 'bg-blue-100', label: 'Total Orders', count: orders.value.length },
   { icon: ORDER_STATUS.Pending.icon, bg: ORDER_STATUS.Pending.statBg, label: 'Pending', count: orders.value.filter(o => o.status === 'Pending').length },
   { icon: ORDER_STATUS.Confirmed.icon, bg: ORDER_STATUS.Confirmed.statBg, label: 'Confirmed', count: orders.value.filter(o => o.status === 'Confirmed').length },
   { icon: ORDER_STATUS.Cancelled.icon, bg: ORDER_STATUS.Cancelled.statBg, label: 'Cancelled', count: orders.value.filter(o => o.status === 'Cancelled').length },

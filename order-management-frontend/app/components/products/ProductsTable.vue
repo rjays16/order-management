@@ -34,17 +34,17 @@
               <button
                 @click="$emit('edit', product)"
                 class="bg-yellow-100 hover:bg-yellow-200 text-yellow-700 px-3 py-1.5 rounded-lg text-xs font-medium transition-all"
-              >✏️ Edit</button>
+              ><Icon name="pencil" class="w-4 h-4" /> Edit</button>
               <button
                 @click="$emit('delete', product.id)"
                 class="bg-red-100 hover:bg-red-200 text-red-700 px-3 py-1.5 rounded-lg text-xs font-medium transition-all"
-              >🗑️ Delete</button>
+              ><Icon name="trash" class="w-4 h-4" /> Delete</button>
             </div>
           </td>
         </tr>
         <tr v-if="products.length === 0">
           <td colspan="7" class="px-6 py-16 text-center text-gray-400">
-            <div class="text-5xl mb-3">📦</div>
+            <Icon name="package" class="w-12 h-12 mb-3 mx-auto text-gray-300" />
             <p>No products found</p>
           </td>
         </tr>

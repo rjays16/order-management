@@ -32,23 +32,23 @@
               <button
                 @click="$emit('view', order)"
                 class="bg-blue-100 hover:bg-blue-200 text-blue-700 px-3 py-1.5 rounded-lg text-xs font-medium transition-all"
-              >👁️ View</button>
+              ><Icon name="eye" class="w-4 h-4" /> View</button>
               <button
                 v-if="order.status === 'Pending'"
                 @click="$emit('confirm', order.id)"
                 class="bg-green-100 hover:bg-green-200 text-green-700 px-3 py-1.5 rounded-lg text-xs font-medium transition-all"
-              >✅ Confirm</button>
+              ><Icon name="check-circle" class="w-4 h-4" /> Confirm</button>
               <button
                 v-if="order.status !== 'Cancelled'"
                 @click="$emit('cancel', order.id)"
                 class="bg-red-100 hover:bg-red-200 text-red-700 px-3 py-1.5 rounded-lg text-xs font-medium transition-all"
-              >❌ Cancel</button>
+              ><Icon name="x-circle" class="w-4 h-4" /> Cancel</button>
             </div>
           </td>
         </tr>
         <tr v-if="orders.length === 0">
           <td colspan="6" class="px-6 py-16 text-center text-gray-400">
-            <div class="text-5xl mb-3">🛒</div>
+            <Icon name="shopping-cart" class="w-12 h-12 mb-3 mx-auto text-gray-300" />
             <p>No orders found</p>
           </td>
         </tr>

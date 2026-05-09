@@ -6,7 +6,7 @@
 
       <!-- Logo -->
       <div class="bg-blue-600 px-6 py-5">
-        <h1 class="text-white font-bold text-xl">📦 OrderSync</h1>
+        <h1 class="text-white font-bold text-xl flex items-center gap-2"><Icon name="package" class="text-white" /> OrderSync</h1>
         <p class="text-blue-200 text-xs mt-1">Management System</p>
       </div>
 
@@ -17,7 +17,7 @@
           class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-600 hover:bg-blue-50 hover:text-blue-600 transition-all"
           active-class="bg-blue-50 text-blue-600 font-semibold"
         >
-          <span class="text-xl">📊</span>
+          <Icon name="chart-bar" class="w-5 h-5" />
           <span>Dashboard</span>
         </NuxtLink>
 
@@ -26,7 +26,7 @@
           class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-600 hover:bg-blue-50 hover:text-blue-600 transition-all"
           active-class="bg-blue-50 text-blue-600 font-semibold"
         >
-          <span class="text-xl">📦</span>
+          <Icon name="package" class="w-5 h-5" />
           <span>Products</span>
         </NuxtLink>
 
@@ -35,7 +35,7 @@
           class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-600 hover:bg-blue-50 hover:text-blue-600 transition-all"
           active-class="bg-blue-50 text-blue-600 font-semibold"
         >
-          <span class="text-xl">🛒</span>
+          <Icon name="shopping-cart" class="w-5 h-5" />
           <span>Orders</span>
         </NuxtLink>
 
@@ -44,7 +44,7 @@
           class="flex items-center gap-3 px-4 py-3 rounded-xl text-gray-600 hover:bg-blue-50 hover:text-blue-600 transition-all"
           active-class="bg-blue-50 text-blue-600 font-semibold"
         >
-          <span class="text-xl">📋</span>
+          <Icon name="clipboard-list" class="w-5 h-5" />
           <span>Activity Logs</span>
         </NuxtLink>
       </nav>
@@ -66,7 +66,7 @@
           {{ pageTitle }}
         </h2>
         <div class="flex items-center gap-3">
-          <span class="text-sm text-gray-500">👤 Admin</span>
+          <span class="text-sm text-gray-500 flex items-center gap-1.5"><Icon name="user" class="w-4 h-4" /> Admin</span>
           <div class="w-9 h-9 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-sm">
             A
           </div>

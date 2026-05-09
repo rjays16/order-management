@@ -7,9 +7,9 @@
       :class="activeTab === tab.value
         ? 'bg-blue-600 text-white'
         : 'bg-gray-100 text-gray-600 hover:bg-gray-200'"
-      class="px-4 py-2 rounded-xl text-sm font-medium transition-all"
+      class="px-4 py-2 rounded-xl text-sm font-medium transition-all flex items-center gap-1.5"
     >
-      {{ tab.label }}
+      <Icon v-if="tab.icon" :name="tab.icon" class="w-4 h-4" /> {{ tab.label }}
     </button>
   </div>
 </template>

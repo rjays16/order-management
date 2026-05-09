@@ -3,7 +3,7 @@
     class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
     <div class="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-lg mx-4">
       <div class="flex items-center justify-between mb-6">
-        <h3 class="text-xl font-bold text-gray-800">🛒 {{ order?.number }}</h3>
+        <h3 class="text-xl font-bold text-gray-800 flex items-center gap-2"><Icon name="shopping-cart" class="w-5 h-5" /> {{ order?.number }}</h3>
         <span :class="ORDER_STATUS[order?.status]?.bg"
           class="px-3 py-1 rounded-full text-xs font-semibold">
           {{ order?.status }}

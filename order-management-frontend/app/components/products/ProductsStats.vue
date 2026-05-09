@@ -5,7 +5,7 @@
       :key="stat.label"
       class="bg-white rounded-2xl shadow-sm p-4 flex items-center gap-3"
     >
-      <div :class="stat.bg" class="p-3 rounded-xl text-2xl">{{ stat.icon }}</div>
+      <div :class="stat.bg" class="p-3 rounded-xl"><Icon :name="stat.icon" class="w-6 h-6" /></div>
       <div>
         <p class="text-gray-400 text-xs">{{ stat.label }}</p>
         <p class="text-xl font-bold text-gray-800">{{ stat.count }}</p>

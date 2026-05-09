@@ -2,7 +2,7 @@
   <div v-if="show"
     class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
     <div class="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-lg mx-4">
-      <h3 class="text-xl font-bold text-gray-800 mb-6">➕ Create New Order</h3>
+      <h3 class="text-xl font-bold text-gray-800 mb-6 flex items-center gap-2"><Icon name="plus" class="w-5 h-5" /> Create New Order</h3>
 
       <div class="space-y-4 mb-6">
         <div v-for="(item, index) in items" :key="index"
@@ -25,8 +25,8 @@
           />
           <button
             @click="removeItem(index)"
-            class="text-red-400 hover:text-red-600 text-lg"
-          >✕</button>
+            class="text-red-400 hover:text-red-600"
+          ><Icon name="x" class="w-5 h-5" /></button>
         </div>
       </div>
 

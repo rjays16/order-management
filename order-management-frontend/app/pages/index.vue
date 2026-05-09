@@ -15,10 +15,10 @@
 definePageMeta({ layout: 'default' })
 
 const stats = [
-  { icon: '🛒', bg: 'bg-blue-100', label: 'Total Orders', value: '128', trend: '↑ 12% this month', trendColor: 'text-green-500' },
-  { icon: '💰', bg: 'bg-green-100', label: 'Total Revenue', value: '₱54,320', trend: '↑ 8% this month', trendColor: 'text-green-500' },
-  { icon: '📦', bg: 'bg-yellow-100', label: 'Total Products', value: '45', trend: '3 low in stock', trendColor: 'text-yellow-500' },
-  { icon: '❌', bg: 'bg-red-100', label: 'Cancelled Orders', value: '8', trend: '↓ 2% this month', trendColor: 'text-red-500' },
+  { icon: 'shopping-cart', bg: 'bg-blue-100', label: 'Total Orders', value: '128', trend: '↑ 12% this month', trendColor: 'text-green-500' },
+  { icon: 'dollar-sign', bg: 'bg-green-100', label: 'Total Revenue', value: '₱54,320', trend: '↑ 8% this month', trendColor: 'text-green-500' },
+  { icon: 'package', bg: 'bg-yellow-100', label: 'Total Products', value: '45', trend: '3 low in stock', trendColor: 'text-yellow-500' },
+  { icon: 'x-circle', bg: 'bg-red-100', label: 'Cancelled Orders', value: '8', trend: '↓ 2% this month', trendColor: 'text-red-500' },
 ]
 
 const recentOrders = [
@@ -38,9 +38,9 @@ const inventory = [
 ]
 
 const recentLogs = [
-  { id: 1, icon: '✅', color: 'bg-green-500', message: 'Order ORD-003 confirmed — inventory deducted', time: '2 hours ago' },
-  { id: 2, icon: '➕', color: 'bg-blue-500', message: 'Added 20 units of Mechanical Keyboard', time: '4 hours ago' },
-  { id: 3, icon: '❌', color: 'bg-red-500', message: 'Order ORD-004 cancelled — inventory restored', time: '5 hours ago' },
-  { id: 4, icon: '🛒', color: 'bg-yellow-500', message: 'New order ORD-005 created', time: '1 day ago' },
+  { icon: 'check-circle', color: 'bg-green-500', message: 'Order ORD-003 confirmed — inventory deducted', time: '2 hours ago' },
+  { icon: 'plus', color: 'bg-blue-500', message: 'Added 20 units of Mechanical Keyboard', time: '4 hours ago' },
+  { icon: 'x-circle', color: 'bg-red-500', message: 'Order ORD-004 cancelled — inventory restored', time: '5 hours ago' },
+  { icon: 'shopping-cart', color: 'bg-yellow-500', message: 'New order ORD-005 created', time: '1 day ago' },
 ]
 </script>

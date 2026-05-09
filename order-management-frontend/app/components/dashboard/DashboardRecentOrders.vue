@@ -1,7 +1,7 @@
 <template>
   <div class="lg:col-span-2 bg-white rounded-2xl shadow-sm p-6">
     <div class="flex items-center justify-between mb-4">
-      <h3 class="text-lg font-bold text-gray-800">🛒 Recent Orders</h3>
+      <h3 class="text-lg font-bold text-gray-800 flex items-center gap-2"><Icon name="shopping-cart" class="w-5 h-5" /> Recent Orders</h3>
       <NuxtLink to="/orders" class="text-sm text-blue-500 hover:underline">View all →</NuxtLink>
     </div>
     <div class="overflow-x-auto">

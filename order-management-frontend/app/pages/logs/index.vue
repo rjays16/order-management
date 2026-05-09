@@ -15,8 +15,8 @@ definePageMeta({ layout: 'default' })
 const activeTab = ref('All')
 
 const tabs = [
-  { label: 'All', value: 'All' },
-  ...Object.entries(LOG_TYPES).map(([value, t]) => ({ label: `${t.icon} ${t.label}`, value }))
+  { icon: '', label: 'All', value: 'All' },
+  ...Object.entries(LOG_TYPES).map(([value, t]) => ({ icon: t.icon, label: t.label, value }))
 ]
 
 const logs = ref([
@@ -43,7 +43,7 @@ const typeCounts = computed(() => {
 })
 
 const stats = computed(() => [
-  { icon: '📋', bg: 'bg-blue-100', label: 'Total Logs', count: logs.value.length },
+  { icon: 'clipboard-list', bg: 'bg-blue-100', label: 'Total Logs', count: logs.value.length },
   { icon: LOG_TYPES.add.icon, bg: LOG_TYPES.add.statBg, label: 'Additions', count: typeCounts.value.add },
   { icon: LOG_TYPES.deduct.icon, bg: LOG_TYPES.deduct.statBg, label: 'Deductions', count: typeCounts.value.deduct },
   { icon: LOG_TYPES.restore.icon, bg: LOG_TYPES.restore.statBg, label: 'Restores', count: typeCounts.value.restore },

@@ -1,14 +1,14 @@
 <template>
   <div class="bg-white rounded-2xl shadow-sm p-6">
     <div class="flex items-center justify-between mb-4">
-      <h3 class="text-lg font-bold text-gray-800">📋 Recent Activity</h3>
+      <h3 class="text-lg font-bold text-gray-800 flex items-center gap-2"><Icon name="clipboard-list" class="w-5 h-5" /> Recent Activity</h3>
       <NuxtLink to="/logs" class="text-sm text-blue-500 hover:underline">View all →</NuxtLink>
     </div>
     <div class="space-y-4">
       <div v-for="log in logs" :key="log.id" class="flex items-start gap-4">
         <div :class="log.color"
           class="w-9 h-9 rounded-full flex items-center justify-center text-white text-sm flex-shrink-0">
-          {{ log.icon }}
+          <Icon :name="log.icon" class="w-4 h-4" />
         </div>
         <div class="flex-1">
           <p class="text-sm text-gray-700 font-medium">{{ log.message }}</p>

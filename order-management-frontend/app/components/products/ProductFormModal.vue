@@ -2,8 +2,8 @@
   <div v-if="show"
     class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
     <div class="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md mx-4">
-      <h3 class="text-xl font-bold text-gray-800 mb-6">
-        {{ isEdit ? '✏️ Edit Product' : '➕ Add Product' }}
+      <h3 class="text-xl font-bold text-gray-800 mb-6 flex items-center gap-2">
+        <Icon :name="isEdit ? 'pencil' : 'plus'" class="w-5 h-5" /> {{ isEdit ? 'Edit Product' : 'Add Product' }}
       </h3>
 
       <div class="space-y-4">
