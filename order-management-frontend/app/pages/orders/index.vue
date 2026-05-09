@@ -25,6 +25,8 @@
 
 <script setup>
 import { ORDER_STATUS, TABS } from '~/utils/orders/orderStatus'
+import OrderViewModal from '~/components/orders/OrderViewModal.vue'
+import OrderCreateModal from '~/components/orders/OrderCreateModal.vue'
 
 definePageMeta({ layout: 'default' })
 

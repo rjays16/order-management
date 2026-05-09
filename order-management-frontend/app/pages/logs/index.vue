@@ -9,6 +9,7 @@
 
 <script setup>
 import { LOG_TYPES } from '~/utils/logs/logTypes'
+import LogsTimeline from '~/components/logs/LogsTimeline.vue'
 
 definePageMeta({ layout: 'default' })
 
