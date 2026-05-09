@@ -34,9 +34,14 @@ const editingId = ref(null)
 const form = ref({ name: '', description: '', price: '', stock: '' })
 const products = ref([])
 
-const { data: productsData } = useAsyncData('products', () => get('/products'))
-
-watch(productsData, (val) => { products.value = val?.data ?? [] }, { immediate: true })
+onMounted(async () => {
+  try {
+    const res = await get('/products')
+    products.value = res?.data ?? []
+  } catch (e) {
+    // handled by useApi
+  }
+})
 
 const filteredProducts = computed(() =>
   products.value.filter(p =>

@@ -23,9 +23,14 @@ const tabs = [
   ...Object.entries(LOG_TYPES).map(([value, t]) => ({ icon: t.icon, label: t.label, value }))
 ]
 
-const { data: logsData } = useAsyncData('logs', () => get('/logs'))
-
-watch(logsData, (val) => { logs.value = val?.data ?? [] }, { immediate: true })
+onMounted(async () => {
+  try {
+    const res = await get('/logs')
+    logs.value = res?.data ?? []
+  } catch (e) {
+    // handled by useApi
+  }
+})
 
 const filteredLogs = computed(() =>
   activeTab.value === 'All' ? logs.value : logs.value.filter(l => l.type === activeTab.value)

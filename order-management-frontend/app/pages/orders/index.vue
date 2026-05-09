@@ -41,13 +41,18 @@ const selectedOrder = ref(null)
 const orders = ref([])
 const productList = ref([])
 
-const { data: ordersData } = useAsyncData('orders', () => get('/orders'))
-const { data: productsData } = useAsyncData('order-products', () => get('/products'))
-
-watch(ordersData, (val) => { orders.value = val?.data ?? [] }, { immediate: true })
-watch(productsData, (val) => {
-  productList.value = (val?.data ?? []).map(p => ({ id: p.id, name: p.name, price: p.price }))
-}, { immediate: true })
+onMounted(async () => {
+  try {
+    const [ordRes, prodRes] = await Promise.all([
+      get('/orders'),
+      get('/products'),
+    ])
+    orders.value = ordRes?.data ?? []
+    productList.value = (prodRes?.data ?? []).map(p => ({ id: p.id, name: p.name, price: p.price }))
+  } catch (e) {
+    // handled by useApi
+  }
+})
 
 const filteredOrders = computed(() =>
   activeTab.value === 'All' ? orders.value : orders.value.filter(o => o.status === activeTab.value)

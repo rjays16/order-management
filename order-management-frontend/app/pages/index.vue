@@ -18,11 +18,19 @@ definePageMeta({ layout: 'default' })
 
 const { get } = useApi()
 
-const { data: dashboard } = useAsyncData('dashboard', () => get('/dashboard'))
+const dashboard = ref(null)
+
+onMounted(async () => {
+  try {
+    dashboard.value = await get('/dashboard')
+  } catch (e) {
+    // error already handled by useApi
+  }
+})
 
 const stats = computed(() => dashboard.value?.stats ?? [])
 const recentOrders = computed(() =>
-  (dashboard.value?.recentOrders?.data ?? []).map(o => ({
+  (dashboard.value?.recentOrders ?? []).map(o => ({
     id: o.id,
     number: o.number,
     date: o.date,
@@ -39,7 +47,7 @@ const inventory = computed(() =>
   }))
 )
 const recentActivity = computed(() =>
-  (dashboard.value?.recentActivity?.data ?? []).map(l => {
+  (dashboard.value?.recentActivity ?? []).map(l => {
     const cfg = logConfig(l.type)
     return {
       id: l.id,
