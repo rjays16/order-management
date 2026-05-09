@@ -1,75 +1,59 @@
-# Nuxt Minimal Starter
+# OrderSync - Frontend
 
-Look at the [Nuxt documentation](https://nuxt.com/docs/getting-started/introduction) to learn more.
+Nuxt 4 + Vue 3 + Tailwind CSS SPA for the Order Management System.
+
+## Requirements
+
+- Node.js 18+
+- npm
 
 ## Setup
 
-Make sure to install dependencies:
-
 ```bash
-# npm
+# Install dependencies
 npm install
 
-# pnpm
-pnpm install
-
-# yarn
-yarn install
-
-# bun
-bun install
-```
-
-## Development Server
-
-Start the development server on `http://localhost:3000`:
-
-```bash
-# npm
+# Start development server
 npm run dev
-
-# pnpm
-pnpm dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
 ```
 
-## Production
+Frontend runs at `http://localhost:3000`.
 
-Build the application for production:
+## Environment
+
+The `.env` file sets the API base URL:
+
+```
+NUXT_PUBLIC_API_BASE=http://localhost:8000/api
+```
+
+Make sure the backend API server is running on `http://localhost:8000`.
+
+## Build for Production
 
 ```bash
-# npm
 npm run build
-
-# pnpm
-pnpm build
-
-# yarn
-yarn build
-
-# bun
-bun run build
-```
-
-Locally preview production build:
-
-```bash
-# npm
 npm run preview
-
-# pnpm
-pnpm preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
 ```
 
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+## Project Structure
+
+```
+app/
+├── components/       # UI components (dashboard/, products/, orders/, logs/)
+│   ├── dashboard/    # Stats, RecentOrders, Inventory, RecentActivity
+│   ├── products/     # Header, Stats, Search, Table, FormModal
+│   ├── orders/       # Header, Stats, Filters, Table, ViewModal, CreateModal
+│   └── logs/         # Header, Stats, Filters, Timeline
+├── composables/      # useApi (fetch helper), useToast (notifications)
+├── layouts/          # Default layout with sidebar navigation
+├── pages/            # Dashboard, Products, Orders, Logs
+└── utils/            # Constants (orderStatus, logTypes, productStorage)
+```
+
+## Tech Stack
+
+- Nuxt 4
+- Vue 3 (Composition API, `<script setup>`)
+- Tailwind CSS
+- Nuxt TailwindCSS module
